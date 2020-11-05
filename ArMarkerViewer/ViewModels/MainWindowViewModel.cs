@@ -1,43 +1,47 @@
-﻿using ArMarkerViewer.Commands;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Windows.Controls;
-using System.Windows.Input;
+﻿using System.Collections.Generic;
+using ReactiveUI;
+using System.Reactive;
 
 namespace ArMarkerViewer.ViewModels
 {
-    public class MainWindowViewModel : INotifyPropertyChanged
+    public class MainWindowViewModel : ReactiveObject //, IPokemonListItemViewModel
     {
         public MainWindowViewModel()
         {
-            ToggleBit0 = new MarkerPreviewButtonCommand(0, ToggleBit);
-            ToggleBit1 = new MarkerPreviewButtonCommand(1, ToggleBit);
-            ToggleBit2 = new MarkerPreviewButtonCommand(2, ToggleBit);
-            ToggleBit3 = new MarkerPreviewButtonCommand(3, ToggleBit);
-            ToggleBit4 = new MarkerPreviewButtonCommand(4, ToggleBit);
-            ToggleBit5 = new MarkerPreviewButtonCommand(5, ToggleBit);
-            ToggleBit6 = new MarkerPreviewButtonCommand(6, ToggleBit);
-            ToggleBit7 = new MarkerPreviewButtonCommand(7, ToggleBit);
-            ToggleBit8 = new MarkerPreviewButtonCommand(8, ToggleBit);
-            ToggleBit9 = new MarkerPreviewButtonCommand(9, ToggleBit);
+            ToggleBit0 = ReactiveCommand.Create(() => ToggleBit(0));
+            ToggleBit1 = ReactiveCommand.Create(() => ToggleBit(1));
+            ToggleBit2 = ReactiveCommand.Create(() => ToggleBit(2));
+            ToggleBit3 = ReactiveCommand.Create(() => ToggleBit(3));
+            ToggleBit4 = ReactiveCommand.Create(() => ToggleBit(4));
+            ToggleBit5 = ReactiveCommand.Create(() => ToggleBit(5));
+            ToggleBit6 = ReactiveCommand.Create(() => ToggleBit(6));
+            ToggleBit7 = ReactiveCommand.Create(() => ToggleBit(7));
+            ToggleBit8 = ReactiveCommand.Create(() => ToggleBit(8));
+            ToggleBit9 = ReactiveCommand.Create(() => ToggleBit(9));
+
+            ListSelectionChanged = ReactiveCommand.Create(() =>
+            { 
+                if (ListSelectedItem != null)
+                {
+                    PokemonId = ListSelectedItem.PokemonId;
+                    ListSelectedItem = null;
+                }
+            });
         }
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        void NotifyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
 
         private ushort pokemonIdValue = 0;
         public ushort PokemonId
         {
             get => pokemonIdValue;
-            set
-            {
-                pokemonIdValue = value;
-                NotifyChanged(nameof(PokemonId));
-            }
+            set => this.RaiseAndSetIfChanged(ref pokemonIdValue, value);
         }
 
+        private PokemonListItemViewModel listItemValue = null;
+        public PokemonListItemViewModel ListSelectedItem
+        {
+            get => listItemValue;
+            set => this.RaiseAndSetIfChanged(ref listItemValue, value);
+        }
 
         public IEnumerable<ushort> PokemonIds
         {
@@ -58,26 +62,18 @@ namespace ArMarkerViewer.ViewModels
             }
         }
 
-        public void PokemonList_SelectionChanged(ListView list)
-        {
-            if (list.SelectedItem != null)
-            {
-                PokemonId = (ushort)list.SelectedItem;
-                list.SelectedItem = null;
-            }
-        }
+        public ReactiveCommand<Unit, Unit> ListSelectionChanged { get; }
 
-        void ToggleBit(ushort toggle) => PokemonId ^= toggle;
-
-        public ICommand ToggleBit0 { get; set; }
-        public ICommand ToggleBit1 { get; set; }
-        public ICommand ToggleBit2 { get; set; }
-        public ICommand ToggleBit3 { get; set; }
-        public ICommand ToggleBit4 { get; set; }
-        public ICommand ToggleBit5 { get; set; }
-        public ICommand ToggleBit6 { get; set; }
-        public ICommand ToggleBit7 { get; set; }
-        public ICommand ToggleBit8 { get; set; }
-        public ICommand ToggleBit9 { get; set; }
+        private void ToggleBit(int offset) => PokemonId ^= (ushort)(1 << offset);
+        public ReactiveCommand<Unit, Unit> ToggleBit0 { get; }
+        public ReactiveCommand<Unit, Unit> ToggleBit1 { get; }
+        public ReactiveCommand<Unit, Unit> ToggleBit2 { get; }
+        public ReactiveCommand<Unit, Unit> ToggleBit3 { get; }
+        public ReactiveCommand<Unit, Unit> ToggleBit4 { get; }
+        public ReactiveCommand<Unit, Unit> ToggleBit5 { get; }
+        public ReactiveCommand<Unit, Unit> ToggleBit6 { get; }
+        public ReactiveCommand<Unit, Unit> ToggleBit7 { get; }
+        public ReactiveCommand<Unit, Unit> ToggleBit8 { get; }
+        public ReactiveCommand<Unit, Unit> ToggleBit9 { get; }
     }
 }

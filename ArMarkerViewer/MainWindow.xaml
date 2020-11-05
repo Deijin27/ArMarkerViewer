@@ -1,49 +1,30 @@
-﻿<Window x:Class="ArMarkerViewer.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:controls="clr-namespace:ArMarkerViewer.Controls"
-        xmlns:valueConverters="clr-namespace:ArMarkerViewer.ValueConverters"
-        xmlns:vm="clr-namespace:ArMarkerViewer.ViewModels"
-        mc:Ignorable="d"
-        Title="AR Marker Viewer" Height="400" Width="470"
-        d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel, IsDesignTimeCreatable=True}">
-    
-    <Window.DataContext>
-        <vm:MainWindowViewModel x:Name="VmInstance"/>
-    </Window.DataContext>
-    
+﻿<reactiveui:ReactiveWindow x:Class="ArMarkerViewer.MainWindow"
+                           x:TypeArguments="vm:MainWindowViewModel"
+                           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                           xmlns:reactiveui="http://reactiveui.net"
+                           xmlns:controls="clr-namespace:ArMarkerViewer.Controls"
+                           xmlns:vm="clr-namespace:ArMarkerViewer.ViewModels"
+                           mc:Ignorable="d"
+                           Title="AR Marker Viewer" Height="400" Width="470">
+
     <Window.Resources>
         <ResourceDictionary>
             
-            <valueConverters:PokemonIdToNameConverter x:Key="pokemonIdToNameConverter" />
-            <valueConverters:PokemonIdToArMarkerConverter x:Key="pokemonIdToArMarkerConverter"/>
-            <valueConverters:PokemonIdToIconConverter x:Key="pokemonIdToIconConverter"/>
-
             <ItemsPanelTemplate x:Key="VirtualPanel">
                 <VirtualizingStackPanel />
             </ItemsPanelTemplate>
-            
+
         </ResourceDictionary>
     </Window.Resources>
-    
+
+   
     <DockPanel>
-        
-        <ListView DockPanel.Dock="Right" Width="220" Background="WhiteSmoke" 
-                  ItemsSource="{Binding PokemonIds, Mode=OneTime}" 
-                  ItemsPanel="{DynamicResource VirtualPanel}" 
-                  SelectionChanged="PokemonList_SelectionChanged">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="{Binding ., Converter={StaticResource pokemonIdToIconConverter}}" VerticalAlignment="Center" Height="32" Width="32" Margin="0,0,10,0"/>
-                        <TextBlock Text="{Binding ., Converter={StaticResource pokemonIdToNameConverter}}" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        
+
+        <ListView x:Name="PokemonList" DockPanel.Dock="Right" Width="220" Background="WhiteSmoke" ItemsPanel="{DynamicResource VirtualPanel}" />
+
         <Grid DockPanel.Dock="Bottom" Background="WhiteSmoke">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -53,19 +34,13 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Image Width="32" Height="32" Margin="20,20,10,0"
-                   Source="{Binding PokemonId, Mode=OneWay, Converter={StaticResource pokemonIdToIconConverter}}"
-                   />
-            <TextBlock Text="{Binding PokemonId, Mode=OneWay, Converter={StaticResource pokemonIdToNameConverter}}" 
-                       Padding="0,0,0,0" Margin="0,20,20,0" Grid.Column="1" VerticalAlignment="Center"
-                       />
-            <controls:NumberBox Value="{Binding PokemonId, Mode=TwoWay, ElementName=VmInstance}" Grid.Row="1" Grid.ColumnSpan="2" Margin="20,20,20,20"/>
+            <Image x:Name="PokemonIcon" Width="32" Height="32" Margin="20,20,10,0" />
+            <TextBlock x:Name="PokemonName" Text="Pikachuyyyy" Padding="0,0,0,0" Margin="0,20,20,0" Grid.Column="1" VerticalAlignment="Center" />
+            <controls:NumberBox x:Name="IdNumberBox" Grid.Row="1" Grid.ColumnSpan="2" Margin="20,20,20,20" />
         </Grid>
         
         <Grid Background="White">
-            <Image Source="{Binding PokemonId, Mode=OneWay, Converter={StaticResource pokemonIdToArMarkerConverter}}" 
-                   Grid.RowSpan="2" Grid.Column="2" Height="150" Width="150"
-                   />
+            <Image x:Name="ArMarkerImage" Grid.RowSpan="2" Grid.Column="2" Height="150" Width="150" />
             <Grid Grid.RowSpan="2" Grid.Column="2" Height="100" Width="100">
                 <Grid.Resources>
                     <Style TargetType="Button">
@@ -86,19 +61,19 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 
-                <Button Grid.Row="0" Grid.Column="1" Command="{Binding ToggleBit8}"/>
-                <Button Grid.Row="0" Grid.Column="2" Command="{Binding ToggleBit5}"/>
-                <Button Grid.Row="0" Grid.Column="3" Command="{Binding ToggleBit2}"/>
-                <Button Grid.Row="1" Grid.Column="1" Command="{Binding ToggleBit9}"/>
-                <Button Grid.Row="1" Grid.Column="3" Command="{Binding ToggleBit7}"/>
-                <Button Grid.Row="2" Grid.Column="2" Command="{Binding ToggleBit9}"/>
-                <Button Grid.Row="2" Grid.Column="3" Command="{Binding ToggleBit4}"/>
-                <Button Grid.Row="3" Grid.Column="0" Command="{Binding ToggleBit0}"/>
-                <Button Grid.Row="3" Grid.Column="1" Command="{Binding ToggleBit3}"/>
-                <Button Grid.Row="3" Grid.Column="2" Command="{Binding ToggleBit6}"/>
-                <Button Grid.Row="3" Grid.Column="3" Command="{Binding ToggleBit1}"/>
+                <Button Grid.Row="0" Grid.Column="1" x:Name="ArMarkerButton0"/>
+                <Button Grid.Row="0" Grid.Column="2" x:Name="ArMarkerButton1"/>
+                <Button Grid.Row="0" Grid.Column="3" x:Name="ArMarkerButton2"/>
+                <Button Grid.Row="1" Grid.Column="1" x:Name="ArMarkerButton3"/>
+                <Button Grid.Row="1" Grid.Column="3" x:Name="ArMarkerButton4"/>
+                <Button Grid.Row="2" Grid.Column="2" x:Name="ArMarkerButton5"/>
+                <Button Grid.Row="2" Grid.Column="3" x:Name="ArMarkerButton6"/>
+                <Button Grid.Row="3" Grid.Column="0" x:Name="ArMarkerButton7"/>
+                <Button Grid.Row="3" Grid.Column="1" x:Name="ArMarkerButton8"/>
+                <Button Grid.Row="3" Grid.Column="2" x:Name="ArMarkerButton9"/>
+                <Button Grid.Row="3" Grid.Column="3" x:Name="ArMarkerButton10"/>
             </Grid>
         </Grid>
 
     </DockPanel>
-</Window>
+</reactiveui:ReactiveWindow>
