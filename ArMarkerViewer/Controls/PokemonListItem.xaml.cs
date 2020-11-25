@@ -13,20 +13,30 @@ namespace ArMarkerViewer.Controls
         public PokemonListItem()
         {
             InitializeComponent();
+
+            
+
             this.WhenActivated(disposable =>
             {
-                this.OneWayBind(ViewModel,
-                    viewModel => viewModel.PokemonId,
-                    view => view.PokemonIcon.Source,
-                    Conversions.PokemonIdToIcon)
-                    .DisposeWith(disposable);
+                //this.OneWayBind(ViewModel,
+                //    viewModel => viewModel.PokemonId,
+                //    view => view.PokemonIcon.Source,
+                //    Conversions.PokemonIdToIcon)
+                //    .DisposeWith(disposable);
 
-                this.OneWayBind(ViewModel,
-                    viewModel => viewModel.PokemonId,
-                    view => view.PokemonName.Text,
-                    Conversions.PokemonIdToName)
-                    .DisposeWith(disposable);
+
+
+                //this.OneWayBind(ViewModel,
+                //    viewModel => viewModel.PokemonId,
+                //    view => view.PokemonName.Text,
+                //    Conversions.PokemonIdToName)
+                //    .DisposeWith(disposable);
+
+                PokemonIcon.Source = Conversions.PokemonIdToIcon(ViewModel.PokemonId);
+                PokemonName.Text = Conversions.PokemonIdToName(ViewModel.PokemonId);
+
             });
+
         }
     }
 }

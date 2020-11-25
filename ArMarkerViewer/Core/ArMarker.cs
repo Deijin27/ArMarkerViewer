@@ -32,29 +32,27 @@ namespace ArMarkerViewer.Core
 
         public static ushort PokemonIdToCode(ushort pokemonId)
         {
-            int result = 0x0200; // start with this because of offset 9 always being 1
+            int result = 0x0200 // start with this because of offset 9 always being 1
 
-            // I could remove one shift from these things, but speed doesn't really matter and it's much easier to understand like this.
+                | ((pokemonId >> 5) & 1) << 2 // I could remove one shift from these things, but speed doesn't really matter and it's much easier to understand like this.
+                | SpecialNumberCycle(pokemonId, 1) // << 0
+                | ((pokemonId >> 8) & 1) << 1                            
+                | ((pokemonId >> 2) & 1) << 3
 
-            result |= SpecialNumberCycle(pokemonId, 1); // << 0
-            result |= ((pokemonId >> 8) & 1) << 1;
-            result |= ((pokemonId >> 5) & 1) << 2;
-            result |= ((pokemonId >> 2) & 1) << 3;
+                | SpecialNumberCycle(pokemonId, 8) << 4
+                | ((pokemonId >> 9) & 1) << 5
+                // offset 6 is always 0
+                | ((pokemonId >> 7) & 1) << 7
 
-            result |= SpecialNumberCycle(pokemonId, 8) << 4;
-            result |= ((pokemonId >> 9) & 1) << 5;
-            // offset 6 is always 0
-            result |= ((pokemonId >> 7) & 1) << 7;
+                | SpecialNumberCycle(pokemonId, 64) << 8
+                // offset 9 is always 1
+                | ((pokemonId >> 9) & 1) << 10
+                | ((pokemonId >> 4) & 1) << 11
 
-            result |= SpecialNumberCycle(pokemonId, 64) << 8;
-            // offset 9 is always 1
-            result |= ((pokemonId >> 9) & 1) << 10;
-            result |= ((pokemonId >> 4) & 1) << 11;
-
-            result |= ((pokemonId >> 0) & 1) << 12;
-            result |= ((pokemonId >> 3) & 1) << 13;
-            result |= ((pokemonId >> 6) & 1) << 14;
-            result |= ((pokemonId >> 1) & 1) << 15;
+                | ((pokemonId >> 0) & 1) << 12
+                | ((pokemonId >> 3) & 1) << 13
+                | ((pokemonId >> 6) & 1) << 14
+                | ((pokemonId >> 1) & 1) << 15;
 
             return (ushort)result;
         }
@@ -68,11 +66,10 @@ namespace ArMarkerViewer.Core
         /// <returns></returns>
         public static bool TryCodeToPokemonId(ushort arMarkerCode, out ushort pokemonId)
         {
-            int result = 0;
-
-            result |= ((arMarkerCode >> 1) & 1) << 8;
-            result |= ((arMarkerCode >> 2) & 1) << 5;
-            result |= ((arMarkerCode >> 3) & 1) << 2;
+            int result = 0
+                | ((arMarkerCode >> 1) & 1) << 8
+                | ((arMarkerCode >> 2) & 1) << 5
+                | ((arMarkerCode >> 3) & 1) << 2;
 
             int nine1 = ((arMarkerCode >> 5) & 1) << 9;
             int nine2 = ((arMarkerCode >> 10) & 1) << 9;
@@ -82,14 +79,13 @@ namespace ArMarkerViewer.Core
                 pokemonId = 0;
                 return false;
             }
-            result |= nine1;
-
-            result |= ((arMarkerCode >> 7) & 1) << 7;
-            result |= ((arMarkerCode >> 11) & 1) << 4;
-            result |= ((arMarkerCode >> 12) & 1) << 0;
-            result |= ((arMarkerCode >> 13) & 1) << 3;
-            result |= ((arMarkerCode >> 14) & 1) << 6;
-            result |= ((arMarkerCode >> 15) & 1) << 1;
+            result |= nine1
+                | ((arMarkerCode >> 7) & 1) << 7
+                | ((arMarkerCode >> 11) & 1) << 4
+                | ((arMarkerCode >> 12) & 1) << 0
+                | ((arMarkerCode >> 13) & 1) << 3
+                | ((arMarkerCode >> 14) & 1) << 6
+                | ((arMarkerCode >> 15) & 1) << 1;
 
             pokemonId = (ushort)result;
 

@@ -23,7 +23,14 @@
    
     <DockPanel>
 
-        <ListView x:Name="PokemonList" DockPanel.Dock="Right" Width="220" Background="WhiteSmoke" ItemsPanel="{DynamicResource VirtualPanel}" />
+        <ListView x:Name="PokemonList" DockPanel.Dock="Right" Width="220" Background="WhiteSmoke" ItemsPanel="{DynamicResource VirtualPanel}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <controls:PokemonListItem ViewModel="{Binding .}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
 
         <Grid DockPanel.Dock="Bottom" Background="WhiteSmoke">
             <Grid.ColumnDefinitions>
