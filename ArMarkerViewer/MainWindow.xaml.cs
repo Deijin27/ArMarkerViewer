@@ -1,7 +1,6 @@
 ﻿using ArMarkerViewer.ViewModels;
 using ReactiveUI;
 using System.Reactive.Disposables;
-using ArMarkerViewer.ValueConverters;
 using ArMarkerViewer.Core;
 using System.Linq;
 using System.Windows;
@@ -44,11 +43,6 @@ namespace ArMarkerViewer
                     view => view.IdNumberBox.Value)
                     .DisposeWith(disposable);
 
-                //this.OneWayBind(ViewModel,
-                //    vm => vm.PokemonIds,
-                //    v => v.PokemonList.ItemsSource,
-                //    items => items.Select(id => new PokemonListItemViewModel(id)))
-                //    .DisposeWith(disposable);
 
                 this.PokemonList.ItemsSource = ViewModel.PokemonIds.Select(id => new PokemonListItemViewModel(id));
                 
@@ -63,6 +57,7 @@ namespace ArMarkerViewer
                     v => v.PokemonList,
                     nameof(PokemonList.SelectionChanged))
                     .DisposeWith(disposable);
+
 
                 #region ArMarker Toggle Buttons
 

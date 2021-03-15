@@ -8,11 +8,11 @@
                            xmlns:controls="clr-namespace:ArMarkerViewer.Controls"
                            xmlns:vm="clr-namespace:ArMarkerViewer.ViewModels"
                            mc:Ignorable="d"
-                           Title="AR Marker Viewer" Height="400" Width="470">
+                           Title="AR Marker Viewer" Height="400" Width="470" MinHeight="400" MinWidth="470">
 
     <Window.Resources>
         <ResourceDictionary>
-            
+
             <ItemsPanelTemplate x:Key="VirtualPanel">
                 <VirtualizingStackPanel />
             </ItemsPanelTemplate>
@@ -21,31 +21,16 @@
     </Window.Resources>
 
    
-    <DockPanel>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="220"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="120"/>
+        </Grid.RowDefinitions>
 
-        <ListView x:Name="PokemonList" DockPanel.Dock="Right" Width="220" Background="WhiteSmoke" ItemsPanel="{DynamicResource VirtualPanel}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <controls:PokemonListItem ViewModel="{Binding .}"/>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-
-
-        <Grid DockPanel.Dock="Bottom" Background="WhiteSmoke">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Image x:Name="PokemonIcon" Width="32" Height="32" Margin="20,20,10,0" />
-            <TextBlock x:Name="PokemonName" Text="Pikachuyyyy" Padding="0,0,0,0" Margin="0,20,20,0" Grid.Column="1" VerticalAlignment="Center" />
-            <controls:NumberBox x:Name="IdNumberBox" Grid.Row="1" Grid.ColumnSpan="2" Margin="20,20,20,20" />
-        </Grid>
-        
         <Grid Background="White">
             <Image x:Name="ArMarkerImage" Grid.RowSpan="2" Grid.Column="2" Height="150" Width="150" />
             <Grid Grid.RowSpan="2" Grid.Column="2" Height="100" Width="100">
@@ -67,7 +52,7 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                
+
                 <Button Grid.Row="0" Grid.Column="1" x:Name="ArMarkerButton0"/>
                 <Button Grid.Row="0" Grid.Column="2" x:Name="ArMarkerButton1"/>
                 <Button Grid.Row="0" Grid.Column="3" x:Name="ArMarkerButton2"/>
@@ -82,5 +67,40 @@
             </Grid>
         </Grid>
 
-    </DockPanel>
+        <Border Grid.Column="1" Background="Black">
+            <Border.Effect>
+                <DropShadowEffect Direction="180" BlurRadius="50" ShadowDepth="5" Opacity="0.5"/>
+            </Border.Effect>
+        </Border>
+
+        <Border Grid.Row="1" Background="Black">
+            <Border.Effect>
+                <DropShadowEffect Direction="180" BlurRadius="50" ShadowDepth="5" Opacity="0.5"/>
+            </Border.Effect>
+        </Border>
+
+        <Grid Grid.Row="1" Background="WhiteSmoke" Height="120">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="62"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Image x:Name="PokemonIcon" Width="32" Height="32" Margin="20,20,10,0" />
+            <TextBlock x:Name="PokemonName" Text="Pikachuyyyy" Padding="0,0,0,0" Margin="0,20,20,0" Grid.Column="1" VerticalAlignment="Center" />
+            <controls:NumberBox x:Name="IdNumberBox" Grid.Row="1" Grid.ColumnSpan="2" Margin="20,20,20,20" />
+        </Grid>
+
+        <ListView x:Name="PokemonList" Grid.Column="1" Grid.RowSpan="2" Width="220" Background="WhiteSmoke" ItemsPanel="{DynamicResource VirtualPanel}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <controls:PokemonListItem ViewModel="{Binding .}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+
+    
 </reactiveui:ReactiveWindow>

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using ReactiveUI;
 using System.Reactive;
-using System.Linq;
 
 namespace ArMarkerViewer.ViewModels
 {
@@ -20,7 +19,6 @@ namespace ArMarkerViewer.ViewModels
             ToggleBit8 = ReactiveCommand.Create(() => ToggleBit(8));
             ToggleBit9 = ReactiveCommand.Create(() => ToggleBit(9));
 
-            //PokemonIds = new List<PokemonListItemViewModel>(PokemonIdsVals.Select(i => new PokemonListItemViewModel(i)));
 
             ListSelectionChanged = ReactiveCommand.Create(() =>
             { 

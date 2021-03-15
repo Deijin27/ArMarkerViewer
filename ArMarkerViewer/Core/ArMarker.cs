@@ -6,7 +6,6 @@ namespace ArMarkerViewer.Core
     {
         public static Bitmap CodeToImage(ushort arMarkerCode, int pixelSize)
         {
-            // Maybe throw error if pixelSize is less than 1.
             int dimension = pixelSize * 6;
             Bitmap bmp = new Bitmap(dimension, dimension);
             using Graphics g = Graphics.FromImage(bmp);
