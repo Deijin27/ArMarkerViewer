@@ -10,3 +10,6 @@ Change which marker is displayed in 3 different ways:
 - Select from the list
 - Type a ID number, or use the incrementers
 - Interact directly with the image, enabling or disabling pixels
+
+
+![Screenshot](https://i.imgur.com/tUs5WNf.png)
