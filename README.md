@@ -2,7 +2,7 @@
 
 An app for viewing all of the valid AR Markers in Pokedex 3D Pro. 
 
-The marker image is generated programmatically from the pokemon's ID.
+The marker image is generated deterministically from the pokemon's ID.
 
 Written in C#. The app itself uses WPF with ReactiveUI.
 
