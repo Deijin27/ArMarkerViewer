@@ -48,29 +48,19 @@ namespace ArMarkerViewer.Controls
             });
         }
 
-        #region Value
-        public static DependencyProperty ValueProperty = DependencyProperty.Register
-        (
-            nameof(Value),
-            typeof(ushort),
-            typeof(NumberBox),
-            new FrameworkPropertyMetadata((ushort)0) // this default value is dodgy, it didn't work when i tried to make min max properties
-        );
+        public static DependencyProperty ValueProperty = Extensions.RegisterDependencyProperty<NumberBox, ushort>(v => v.Value, 0);
 
         public ushort Value
         {
             get => (ushort)GetValue(ValueProperty);
             set => SetValue(ValueProperty, value);
         }
-        #endregion
+        
 
         #region IViewFor Implementation
-        public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register(
-                nameof(ViewModel),
-                typeof(NumberBoxViewModel),
-                typeof(NumberBox),
-                new PropertyMetadata(null));
+
+        public static readonly DependencyProperty ViewModelProperty = Extensions.RegisterDependencyProperty<NumberBox, NumberBoxViewModel>(v => v.ViewModel);
+
         object IViewFor.ViewModel
         {
             get => ViewModel;
