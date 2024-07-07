@@ -1,5 +1,4 @@
 ﻿using ArMarkerViewer.Core;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
@@ -13,27 +12,17 @@ namespace ArMarkerViewer.ViewModels
         public MainWindowViewModel()
         {
             ToggleBitCommand = new RelayCommand<string>(x => ToggleBit(int.Parse(x)));
-
-            ListSelectionChangedCommand = new RelayCommand(() =>
-            { 
-                if (ListSelectedItem != null)
-                {
-                    PokemonId = ListSelectedItem.PokemonId;
-                    ListSelectedItem = null;
-                }
-            });
-
             Items = PokemonIds.Select(x => new PokemonListItemViewModel(x)).ToList();
             ListSelectedItem = Items[0];
         }
 
-        private ushort pokemonIdValue = 0;
+        private ushort _pokemonId = 0;
         public ushort PokemonId
         {
-            get => pokemonIdValue;
+            get => _pokemonId;
             set
             {
-                if (SetProperty(ref pokemonIdValue, value))
+                if (SetProperty(ref _pokemonId, value))
                 {
                     RaisePropertyChanged(nameof(PokemonName));
                     RaisePropertyChanged(nameof(PokemonIcon));
@@ -47,13 +36,13 @@ namespace ArMarkerViewer.ViewModels
         public ImageSource PokemonIcon => Conversions.PokemonIdToIcon(PokemonId);
 
 
-        private PokemonListItemViewModel listItemValue = null;
+        private PokemonListItemViewModel _listSelectedItem = null;
         public PokemonListItemViewModel ListSelectedItem
         {
-            get => listItemValue;
+            get => _listSelectedItem;
             set
             {
-                if (SetProperty(ref listItemValue, value))
+                if (SetProperty(ref _listSelectedItem, value))
                 {
                     PokemonId = value.PokemonId;
                 }

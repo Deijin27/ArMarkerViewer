@@ -1,6 +1,4 @@
 ﻿using ArMarkerViewer.ViewModels;
-using ArMarkerViewer.Core;
-using System.Linq;
 using System.Windows;
 
 namespace ArMarkerViewer
