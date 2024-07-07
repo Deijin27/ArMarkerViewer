@@ -7,7 +7,7 @@
              d:DesignHeight="20" d:DesignWidth="100">
     <UserControl.Resources>
         <ResourceDictionary>
-            <Style TargetType="Button">
+            <Style TargetType="RepeatButton">
                 <Setter Property="Width" Value="18"/>
                 <Setter Property="Foreground" Value="#606060"/>
                 <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
@@ -18,9 +18,9 @@
     </UserControl.Resources>
     <Border BorderThickness="1" BorderBrush="#ABADB3" Background="#ABADB3" Height="20">
         <DockPanel>
-            <Button x:Name="DecrementButton" DockPanel.Dock="Right" Margin="1,0,0,0"></Button>
-            <Button x:Name="IncrementButton" DockPanel.Dock="Right" Margin="1,0,0,0"></Button>
-            <TextBox x:Name="NumberTextBox" Text="27" BorderThickness="0" Background="White"/>
+            <RepeatButton x:Name="DecrementButton" Click="DecrementButton_Click" DockPanel.Dock="Right" Margin="1,0,0,0"></RepeatButton>
+            <RepeatButton x:Name="IncrementButton" Click="IncrementButton_Click" DockPanel.Dock="Right" Margin="1,0,0,0"></RepeatButton>
+            <TextBox x:Name="NumberTextBox" TextChanged="NumberTextBox_TextChanged" PreviewTextInput="NumberTextBox_PreviewTextInput" Text="27" BorderThickness="0" Background="White"/>
         </DockPanel>
     </Border>
 </UserControl>

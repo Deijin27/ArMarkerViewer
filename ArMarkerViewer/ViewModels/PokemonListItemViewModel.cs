@@ -1,4 +1,5 @@
-﻿using ReactiveUI;
+﻿using ArMarkerViewer.Core;
+using System.Windows.Media;
 
 namespace ArMarkerViewer.ViewModels
 {
@@ -7,10 +8,17 @@ namespace ArMarkerViewer.ViewModels
         ushort PokemonId { get; }
     }
 
-    public class PokemonListItemViewModel : ReactiveObject, IPokemonListItemViewModel
+    public class PokemonListItemViewModel : ViewModelBase, IPokemonListItemViewModel
     {
-        public PokemonListItemViewModel(ushort id) => PokemonId = id;
+        public PokemonListItemViewModel(ushort id)
+        {
+            PokemonId = id;
+            Icon = Conversions.PokemonIdToIcon(PokemonId);
+            Name = Conversions.PokemonIdToName(PokemonId);
+        }
 
         public ushort PokemonId { get; }
+        public ImageSource Icon { get; }
+        public string Name { get; }
     }
 }

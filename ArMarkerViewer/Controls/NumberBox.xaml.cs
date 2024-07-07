@@ -1,85 +1,119 @@
-﻿using System.Reactive.Disposables;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using ArMarkerViewer.ViewModels;
-using ReactiveUI;
 
 namespace ArMarkerViewer.Controls
 {
     /// <summary>
     /// Interaction logic for NumberBox.xaml
     /// </summary>
-    public partial class NumberBox : UserControl, IViewFor<NumberBoxViewModel>
+    public partial class NumberBox : UserControl
     {
         public NumberBox()
         {
             InitializeComponent();
-            ViewModel = new NumberBoxViewModel();
-
-            this.WhenActivated(disposable =>
-            {
-                this.Bind(ViewModel,
-                    vm => vm.Value,
-                    v => v.NumberTextBox.Text,
-                    num => num.ToString(),
-                    str => ushort.TryParse(str, out ushort i) ? i : NumberBoxViewModel.Min)
-                    .DisposeWith(disposable);
-
-                this.Bind(ViewModel,
-                    vm => vm.Value,
-                    v => v.Value)
-                    .DisposeWith(disposable);
-
-                this.BindCommand(ViewModel,
-                    vm => vm.Increment,
-                    v => v.IncrementButton,
-                    nameof(IncrementButton.Click))
-                    .DisposeWith(disposable);
-
-                this.BindCommand(ViewModel,
-                    vm => vm.Decrement,
-                    v => v.DecrementButton,
-                    nameof(DecrementButton.Click))
-                    .DisposeWith(disposable);
-
-                NumberTextBox.PreviewTextInput += TextBox_PreviewTextInput;
-
-            });
+            NumberTextBox.Text = "0";
         }
 
-        public static DependencyProperty ValueProperty = Extensions.RegisterDependencyProperty<NumberBox, ushort>(v => v.Value, 0);
+        public static DependencyProperty ValueProperty = UserControlUtil.RegisterDependencyProperty<NumberBox, int>(v => v.Value, default, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnValuePropertyChanged);
 
-        public ushort Value
+        public int Value
         {
-            get => (ushort)GetValue(ValueProperty);
+            get => (int)GetValue(ValueProperty);
             set => SetValue(ValueProperty, value);
         }
-        
 
-        #region IViewFor Implementation
-
-        public static readonly DependencyProperty ViewModelProperty = Extensions.RegisterDependencyProperty<NumberBox, NumberBoxViewModel>(v => v.ViewModel);
-
-        object IViewFor.ViewModel
+        private static void OnValuePropertyChanged(NumberBox target, DependencyPropertyChangedEventArgs<int> e)
         {
-            get => ViewModel;
-            set => ViewModel = (NumberBoxViewModel)value;
+            target.NumberTextBox.Text = e.NewValue.ToString();
         }
 
-        public NumberBoxViewModel ViewModel
-        {
-            get => (NumberBoxViewModel)GetValue(ViewModelProperty);
-            set => SetValue(ViewModelProperty, value);
-        }
-        #endregion
+        public static DependencyProperty MinProperty = UserControlUtil.RegisterDependencyProperty<NumberBox, int>(v => v.Min, 0);
 
-        private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        public int Min
         {
+            get => (int)GetValue(MinProperty);
+            set => SetValue(MinProperty, value);
+        }
+
+        public static DependencyProperty MaxProperty = UserControlUtil.RegisterDependencyProperty<NumberBox, int>(v => v.Max, int.MaxValue);
+
+        public int Max
+        {
+            get => (int)GetValue(MaxProperty);
+            set => SetValue(MaxProperty, value);
+        }
+
+        public static DependencyProperty IncrementProperty = UserControlUtil.RegisterDependencyProperty<NumberBox, int>(v => v.Increment, 1);
+
+        public int Increment
+        {
+            get => (int)GetValue(IncrementProperty);
+            set => SetValue(IncrementProperty, value);
+        }
+
+        private void IncrementButton_Click(object sender, RoutedEventArgs e)
+        {
+            int newVal = Value + Increment;
+            if (newVal <= Max && newVal > Value)
+            {
+                Value = newVal;
+                RaiseValueChanged();
+            }
+        }
+
+        private void DecrementButton_Click(object sender, RoutedEventArgs e)
+        {
+            int newVal = Value - Increment;
+            if (newVal >= Min && newVal < Value)
+            {
+                Value = newVal;
+                RaiseValueChanged();
+            }
+        }
+
+        private void NumberTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var senderTextBox = (TextBox)sender;
+            string text = senderTextBox.Text;
+            var newVal = int.TryParse(text, out int i) ? i : Min;
+            if (Value != newVal)
+            {
+                Value = newVal;
+                RaiseValueChanged();
+                if (string.IsNullOrEmpty(text))
+                {
+                    senderTextBox.Text = "";
+                }
+            }
+        }
+
+        private void NumberTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            var tb = (TextBox)sender;
+            string currentText = tb.Text;
+            string newText;
+
+            if (tb.SelectionLength != 0)
+            {
+                string startText = currentText.Substring(0, tb.SelectionStart);
+                string endText = currentText.Substring(tb.SelectionStart + tb.SelectionLength);
+                newText = startText + e.Text + endText;
+            }
+            else
+            {
+                newText = currentText + e.Text;
+            }
             // If it's invlaid, mark as handled so it doesn't proceed, else mark as not handled.
-            string newText = ((TextBox)sender).Text + e.Text;
-            e.Handled = !(ushort.TryParse(newText, out ushort i) && i >= NumberBoxViewModel.Min && i <= NumberBoxViewModel.Max);
+
+            e.Handled = !(int.TryParse(newText, out int i) && i >= Min && i <= Max);
         }
-    
+
+        private void RaiseValueChanged()
+        {
+            ValueChanged?.Invoke(this, new EventArgs());
+        }
+        public event EventHandler ValueChanged;
     }
 }

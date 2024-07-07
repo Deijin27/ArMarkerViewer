@@ -1,7 +1,4 @@
-﻿using Splat;
-using System.Windows;
-using ReactiveUI;
-using System.Reflection;
+﻿using System.Windows;
 
 namespace ArMarkerViewer
 {
@@ -12,7 +9,6 @@ namespace ArMarkerViewer
     {
         public App()
         {
-            Locator.CurrentMutable.RegisterViewsForViewModels(Assembly.GetCallingAssembly());
         }
     }
 }

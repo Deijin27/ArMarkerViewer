@@ -1,14 +1,14 @@
-﻿using ReactiveUI;
-using System.Reactive;
+﻿
+using System.Windows.Input;
 
 namespace ArMarkerViewer.ViewModels
 {
-    public class NumberBoxViewModel : ReactiveObject
+    public class NumberBoxViewModel : ViewModelBase
     {
         public NumberBoxViewModel()
         {
-            Increment = ReactiveCommand.Create(() => { if (Value < Max) Value++; });
-            Decrement = ReactiveCommand.Create(() => { if (Value > Min) Value--; });
+            Increment = new RelayCommand(() => { if (Value < Max) Value++; });
+            Decrement = new RelayCommand(() => { if (Value > Min) Value--; });
         }
 
         public const ushort Min = 0;
@@ -18,10 +18,10 @@ namespace ArMarkerViewer.ViewModels
         public ushort Value
         {
             get => _value;
-            set => this.RaiseAndSetIfChanged(ref _value, value);
+            set => SetProperty(ref _value, value);
         }
 
-        public ReactiveCommand<Unit, Unit> Increment { get; }
-        public ReactiveCommand<Unit, Unit> Decrement { get; }
+        public ICommand Increment { get; }
+        public ICommand Decrement { get; }
     }
 }
