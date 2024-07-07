@@ -3,12 +3,7 @@ using System.Windows.Media;
 
 namespace ArMarkerViewer.ViewModels;
 
-public interface IPokemonListItemViewModel
-{
-    ushort PokemonId { get; }
-}
-
-public class PokemonListItemViewModel : ViewModelBase, IPokemonListItemViewModel
+public class PokemonListItemViewModel : ViewModelBase
 {
     public PokemonListItemViewModel(ushort id)
     {
